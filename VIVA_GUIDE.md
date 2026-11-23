@@ -1,7 +1,9 @@
+
 # CAMPUS SKILL AND SERVICE EXCHANGE SYSTEM (CampusConnect)
 ## Academic Project Report & Faculty Viva Preparation Guide
 
 **Project Team:** CodeMates  
+**Team Members:** Shubham Yadav, Tanmay, Bhargav Sai  
 **Course:** Advanced Java Programming / Web Technologies  
 **Target Level:** 2nd Year BTech Computer Science & Engineering  
 

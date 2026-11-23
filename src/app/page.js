@@ -98,10 +98,9 @@ export default function HomePage() {
   ];
 
   const teamMembers = [
-    { name: 'Aarav Sharma', role: 'Full Stack & Database Lead', dept: 'CSE &bull; 2nd Year' },
-    { name: 'Priya Patel', role: 'UI/UX & Frontend Developer', dept: 'IT &bull; 2nd Year' },
-    { name: 'Rohan Verma', role: 'Backend API & Auth Architect', dept: 'ECE &bull; 2nd Year' },
-    { name: 'Sneha Kulkarni', role: 'System Analyst & QA Tester', dept: 'ME &bull; 2nd Year' },
+    { name: 'Shubham Yadav', role: 'Full Stack & Database Lead', dept: 'CSE • 2nd Year' },
+    { name: 'Tanmay', role: 'Frontend & UI/UX Developer', dept: 'CSE • 2nd Year' },
+    { name: 'Bhargav Sai', role: 'Backend API & System Architect', dept: 'CSE • 2nd Year' },
   ];
 
   return (

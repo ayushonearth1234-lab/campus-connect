@@ -1,6 +1,7 @@
 # CampusConnect - Campus Skill and Service Exchange System
 
 **Project Team:** CodeMates  
+**Team Members:** Shubham Yadav, Tanmay, Bhargav Sai  
 **Course:** Advanced Java Programming / Web Technologies  
 **Target Level:** 2nd Year BTech CSE  
 

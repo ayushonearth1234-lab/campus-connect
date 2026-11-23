@@ -72,11 +72,17 @@ export default function Footer() {
           {/* CodeMates Team */}
           <div>
             <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Developed By</h4>
-            <p className="text-xs text-slate-400 mb-2 font-medium">
+            <p className="text-xs text-slate-300 mb-2 font-semibold">
               Team CodeMates &bull; 2nd Year BTech CSE
             </p>
+            <div className="text-xs text-indigo-300 font-medium space-y-1 mb-3 bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/60">
+              <p className="text-[11px] text-slate-400 uppercase tracking-wider font-bold mb-1">Team Members:</p>
+              <p>&bull; Shubham Yadav</p>
+              <p>&bull; Tanmay</p>
+              <p>&bull; Bhargav Sai</p>
+            </div>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Developed as part of the Advanced Java Programming / Web Technologies curriculum to demonstrate relational database design, REST APIs, and authentication.
+              Developed as part of the Advanced Java Programming / Web Technologies curriculum.
             </p>
           </div>
         </div>

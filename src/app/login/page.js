@@ -31,6 +31,14 @@ export default function LoginPage() {
         throw new Error(data.error || 'Login failed. Please check credentials.');
       }
 
+      // Store auth session for client resilience
+      if (typeof window !== 'undefined' && data.token) {
+        localStorage.setItem('campus_token', data.token);
+        if (data.user) {
+          localStorage.setItem('campus_user', JSON.stringify(data.user));
+        }
+      }
+
       // Successful login -> redirect to student dashboard
       router.push('/dashboard');
       router.refresh();

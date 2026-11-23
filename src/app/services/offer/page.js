@@ -33,7 +33,10 @@ export default function OfferServicePage() {
   ];
 
   useEffect(() => {
-    fetch('/api/auth/me')
+    const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+    fetch('/api/auth/me', { headers })
       .then((res) => {
         if (!res.ok) {
           router.push('/login');
@@ -54,9 +57,15 @@ export default function OfferServicePage() {
     setLoading(true);
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch('/api/services', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(formData)
       });
 

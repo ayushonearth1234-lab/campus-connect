@@ -307,10 +307,11 @@ let nextRequestId = 4;
 async function initConnection() {
   if (activeMode) return activeMode;
 
-  const dbHost = process.env.DB_HOST || '';
-  const databaseUrl = process.env.DATABASE_URL || '';
+  const DEFAULT_TIDB_URL = 'mysql://29Y5D95c7xnvrXU.root:q6Jj4LFdykHNawCb@gateway01.ap-northeast-1.prod.aws.tidbcloud.com/campus_connect';
+  const databaseUrl = process.env.DATABASE_URL || DEFAULT_TIDB_URL;
+  const dbHost = process.env.DB_HOST || 'gateway01.ap-northeast-1.prod.aws.tidbcloud.com';
 
-  // 1. Check for TiDB Cloud Serverless
+  // 1. Check for TiDB Cloud Serverless (default and primary cloud mode)
   if (databaseUrl.includes('tidbcloud.com') || dbHost.includes('tidbcloud.com')) {
     try {
       const { connect } = await import('@tidbcloud/serverless');
@@ -366,22 +367,23 @@ export async function executeQuery(sql, params = []) {
   // Mode 1: TiDB Cloud Serverless
   if (mode === 'tidb' && tidbClient) {
     try {
-      const rows = await tidbClient.execute(sql, params);
-
-      // If INSERT, retrieve LAST_INSERT_ID()
       const trimmed = sql.trim().toUpperCase();
+
+      // If INSERT, execute with fullResult to retrieve accurate lastInsertId directly
       if (trimmed.startsWith('INSERT INTO')) {
-        const [lastIdResult] = await tidbClient.execute('SELECT LAST_INSERT_ID() AS id');
+        const full = await tidbClient.execute(sql, params, { fullResult: true });
         return {
-          insertId: Number(lastIdResult?.id) || 1,
-          affectedRows: 1
+          insertId: Number(full?.lastInsertId) || 1,
+          affectedRows: Number(full?.rowsAffected) || 1
         };
       }
 
       if (trimmed.startsWith('UPDATE') || trimmed.startsWith('DELETE')) {
-        return { affectedRows: 1 };
+        const full = await tidbClient.execute(sql, params, { fullResult: true });
+        return { affectedRows: Number(full?.rowsAffected) || 1 };
       }
 
+      const rows = await tidbClient.execute(sql, params);
       return Array.isArray(rows) ? rows : [];
     } catch (err) {
       console.error('TiDB execute error:', err.message, 'Query:', sql);

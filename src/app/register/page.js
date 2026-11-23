@@ -65,6 +65,14 @@ export default function RegisterPage() {
         throw new Error(data.error || 'Registration failed');
       }
 
+      // Store auth session for client resilience
+      if (typeof window !== 'undefined' && data.token) {
+        localStorage.setItem('campus_token', data.token);
+        if (data.user) {
+          localStorage.setItem('campus_user', JSON.stringify(data.user));
+        }
+      }
+
       // Redirect directly to dashboard upon successful registration
       router.push('/dashboard');
       router.refresh();

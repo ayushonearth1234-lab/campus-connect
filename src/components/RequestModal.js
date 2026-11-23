@@ -35,9 +35,13 @@ export default function RequestModal({
         description: description.trim() || `Requesting ${type} exchange for ${title}`
       };
 
+      const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch('/api/requests', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(payload)
       });
 

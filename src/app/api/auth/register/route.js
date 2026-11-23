@@ -69,7 +69,16 @@ export async function POST(request) {
       ]
     );
 
-    const newStudentId = result.insertId;
+    let newStudentId = Number(result?.insertId);
+    if (!newStudentId || newStudentId <= 1) {
+      const verified = await executeQuery(
+        'SELECT student_id FROM students WHERE email = ?',
+        [email.toLowerCase().trim()]
+      );
+      if (verified && verified.length > 0) {
+        newStudentId = Number(verified[0].student_id);
+      }
+    }
 
     const newStudent = {
       student_id: newStudentId,
@@ -83,15 +92,18 @@ export async function POST(request) {
     // 5. Generate session token
     const token = generateToken(newStudent);
 
-    // 6. Set HTTP-only cookie
+    // 6. Set HTTP-only cookie and return token in JSON for client Authorization header
     const response = NextResponse.json(
-      { message: 'Registration successful! Welcome to CampusConnect.', user: newStudent },
+      { message: 'Registration successful! Welcome to CampusConnect.', user: newStudent, token },
       { status: 201 }
     );
 
+    const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
+                    (request.url && request.url.startsWith('https://'));
+
     response.cookies.set('campus_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isHttps,
       sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 // 7 days

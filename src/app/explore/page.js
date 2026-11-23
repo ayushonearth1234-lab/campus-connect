@@ -50,13 +50,16 @@ export default function ExploreSkillsPage() {
 
   // Check login & load matches
   useEffect(() => {
-    fetch('/api/auth/me')
+    const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+    fetch('/api/auth/me', { headers })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.user) {
           setUser(data.user);
           // Fetch skill matches for this user
-          fetch('/api/matches')
+          fetch('/api/matches', { headers })
             .then((mRes) => (mRes.ok ? mRes.json() : null))
             .then((mData) => {
               if (mData?.matches) setMatches(mData.matches);

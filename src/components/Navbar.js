@@ -13,7 +13,10 @@ export default function Navbar() {
 
   useEffect(() => {
     // Check if user is logged in
-    fetch('/api/auth/me')
+    const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+    fetch('/api/auth/me', { headers })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data && data.user) {
@@ -28,12 +31,16 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      setUser(null);
-      router.push('/login');
-      router.refresh();
     } catch (err) {
       console.error('Logout error:', err);
     }
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('campus_token');
+      localStorage.removeItem('campus_user');
+    }
+    setUser(null);
+    router.push('/login');
+    router.refresh();
   };
 
   const navLinks = [

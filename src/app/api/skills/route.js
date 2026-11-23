@@ -88,7 +88,7 @@ export async function POST(request) {
       `INSERT INTO skills (student_id, skill_name, category, description, type, experience_level, availability)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
-        currentUser.student_id,
+        Number(currentUser.student_id),
         skill_name.trim(),
         category.trim(),
         description ? description.trim() : '',
@@ -104,6 +104,6 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error('Skills POST error:', error);
-    return NextResponse.json({ error: 'Failed to save skill listing' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to save skill listing' }, { status: 500 });
   }
 }

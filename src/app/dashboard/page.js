@@ -28,8 +28,11 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
     // 1. Fetch current authenticated user
-    fetch('/api/auth/me')
+    fetch('/api/auth/me', { headers })
       .then((res) => {
         if (!res.ok) {
           router.push('/login');
@@ -45,7 +48,7 @@ export default function DashboardPage() {
       .catch(() => router.push('/login'));
 
     // 2. Fetch personalized stats
-    fetch('/api/stats')
+    fetch('/api/stats', { headers })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && data.userStats) {
@@ -55,7 +58,7 @@ export default function DashboardPage() {
       .catch(() => {});
 
     // 3. Fetch skill matches
-    fetch('/api/matches')
+    fetch('/api/matches', { headers })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && data.matches) {

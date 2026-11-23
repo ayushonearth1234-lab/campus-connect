@@ -18,7 +18,7 @@ export async function GET(request) {
     );
 
     if (!rows || rows.length === 0) {
-      return NextResponse.json({ user: null }, { status: 404 });
+      return NextResponse.json({ user: userPayload }, { status: 200 });
     }
 
     return NextResponse.json({ user: rows[0] }, { status: 200 });

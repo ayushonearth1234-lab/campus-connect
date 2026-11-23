@@ -53,15 +53,18 @@ export async function POST(request) {
     // 5. Generate JWT token
     const token = generateToken(userPayload);
 
-    // 6. Set HTTP-only Cookie
+    // 6. Set HTTP-only Cookie and return token in JSON for client Authorization header
     const response = NextResponse.json(
-      { message: 'Login successful!', user: userPayload },
+      { message: 'Login successful!', user: userPayload, token },
       { status: 200 }
     );
 
+    const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
+                    (request.url && request.url.startsWith('https://'));
+
     response.cookies.set('campus_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isHttps,
       sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 // 7 days

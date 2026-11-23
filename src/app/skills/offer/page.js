@@ -36,7 +36,10 @@ export default function OfferSkillPage() {
   const levels = ['Beginner', 'Intermediate', 'Advanced'];
 
   useEffect(() => {
-    fetch('/api/auth/me')
+    const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+    fetch('/api/auth/me', { headers })
       .then((res) => {
         if (!res.ok) {
           router.push('/login');
@@ -57,9 +60,15 @@ export default function OfferSkillPage() {
     setLoading(true);
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('campus_token') : null;
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch('/api/skills', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           ...formData,
           type: 'offered'

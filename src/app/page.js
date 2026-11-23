@@ -26,10 +26,10 @@ import {
 
 export default function HomePage() {
   const [stats, setStats] = useState({
-    totalStudents: 5,
-    totalOfferedSkills: 4,
-    totalWantedSkills: 4,
-    totalServices: 4,
+    totalStudents: 22,
+    totalOfferedSkills: 20,
+    totalWantedSkills: 6,
+    totalServices: 22,
   });
   const [recentSkills, setRecentSkills] = useState([]);
   const [recentServices, setRecentServices] = useState([]);
